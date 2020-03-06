@@ -24,9 +24,9 @@ class Node:
         self.active = True
         self.fill = False
 
-    def choose(self, color):
+    def choose(self, color, fill=True):
         self.color = color
-        self.fill = True
+        self.fill = fill
 
     def __lt__(self, other):
         return self.x**2 + self.y**2 < other.x**2 + self.y**2
@@ -48,7 +48,7 @@ class Graph:
                 return i
         return None
 
-    def neighbors(self, node):
+    def neighbors(self, node, diagonal):
         result = set()
         if self.find_node(node.x, node.y+CELL_SIZE) and self.nodes[self.find_node(node.x, node.y+CELL_SIZE)].active:
             result.add(self.nodes[self.find_node(node.x, node.y+CELL_SIZE)])
@@ -58,6 +58,15 @@ class Graph:
             result.add(self.nodes[self.find_node(node.x, node.y-CELL_SIZE)])
         if self.find_node(node.x-CELL_SIZE, node.y) and self.nodes[self.find_node(node.x-CELL_SIZE, node.y)].active:
             result.add(self.nodes[self.find_node(node.x-CELL_SIZE, node.y)])
+        if diagonal:
+            if self.find_node(node.x+CELL_SIZE, node.y+CELL_SIZE) and self.nodes[self.find_node(node.x+CELL_SIZE, node.y+CELL_SIZE)].active:
+                result.add(self.nodes[self.find_node(node.x+CELL_SIZE, node.y+CELL_SIZE)])
+            if self.find_node(node.x+CELL_SIZE, node.y-CELL_SIZE) and self.nodes[self.find_node(node.x+CELL_SIZE, node.y-CELL_SIZE)].active:
+                result.add(self.nodes[self.find_node(node.x+CELL_SIZE, node.y-CELL_SIZE)])
+            if self.find_node(node.x-CELL_SIZE, node.y+CELL_SIZE) and self.nodes[self.find_node(node.x-CELL_SIZE, node.y+CELL_SIZE)].active:
+                result.add(self.nodes[self.find_node(node.x-CELL_SIZE, node.y+CELL_SIZE)])
+            if self.find_node(node.x-CELL_SIZE, node.y-CELL_SIZE) and self.nodes[self.find_node(node.x-CELL_SIZE, node.y-CELL_SIZE)].active:
+                result.add(self.nodes[self.find_node(node.x-CELL_SIZE, node.y-CELL_SIZE)])
         return result
 
 # (x*30 + y)//20

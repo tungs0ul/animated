@@ -94,11 +94,19 @@ while playing:
         win.fill(WHITE)
         if len(nodes):
             current_node = heapq.heappop(nodes)[1]
-            for node in g.neighbors(current_node):
-                f = 1 + distance[current_node] + (dst.y - node.y)**2 + (dst.x - node.x)**2
+            if current_node != src:
+                current_node.choose(LIGHTGRAY, False)
+            for node in g.neighbors(current_node, DIAGONAL):
+                f = distance[current_node]
+                if DIAGONAL:
+                    f += (current_node.x - node.x)**2 + (current_node.y - node.y)**2
+                if ASTAR:
+                    f += (dst.y - node.y)**2 + (dst.x - node.x)**2
+                else:
+                    f += 1
                 if node not in distance or distance[node] > f:
                     if not ((node.x == dst.x) and (node.y == dst.y)):
-                        node.choose(LIGHTGRAY)
+                        node.choose(YELLOW)
                     distance[node] = f
                     previous[node] = current_node
                     heapq.heappush(nodes, (distance[node], node))
