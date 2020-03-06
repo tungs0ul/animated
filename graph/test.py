@@ -1,12 +1,9 @@
-class Node:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-        self.color = BLACK
-        self.active = True
-        self.g = self.h = self.f
+import time
+import datetime
 
+a = time.time()
+for i in range(10000):
+    i**2
+b = time.time()
 
-class Graph:
-    def __init__(self):
-        self.nodes = []
+print(b-a)
