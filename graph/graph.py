@@ -10,7 +10,7 @@ class Node:
         self.color = BLACK
 
     def draw(self, win):
-        self.rect = (self.x, self.y, 20, 20)
+        self.rect = (self.x, self.y, CELL_SIZE, CELL_SIZE)
         if not self.fill:
             pygame.draw.rect(win, self.color, self.rect, 1)
         else:
@@ -36,7 +36,7 @@ class Node:
 
 class Graph:
     def __init__(self):
-        self.nodes = [Node(20*x, 20*y) for x in range(40) for y in range(30)]
+        self.nodes = [Node(CELL_SIZE*x, CELL_SIZE*y) for x in range(DISPLAY_WIDTH//CELL_SIZE) for y in range(DISPLAY_HEIGHT//CELL_SIZE)]
 
     def draw(self, win):
         for node in self.nodes:
@@ -50,14 +50,14 @@ class Graph:
 
     def neighbors(self, node):
         result = set()
-        if self.find_node(node.x, node.y+20) and self.nodes[self.find_node(node.x, node.y+20)].active:
-            result.add(self.nodes[self.find_node(node.x, node.y+20)])
-        if self.find_node(node.x+20, node.y) and self.nodes[self.find_node(node.x+20, node.y)].active:
-            result.add(self.nodes[self.find_node(node.x+20, node.y)])
-        if self.find_node(node.x, node.y-20) and self.nodes[self.find_node(node.x, node.y-20)].active:
-            result.add(self.nodes[self.find_node(node.x, node.y-20)])
-        if self.find_node(node.x-20, node.y) and self.nodes[self.find_node(node.x-20, node.y)].active:
-            result.add(self.nodes[self.find_node(node.x-20, node.y)])
+        if self.find_node(node.x, node.y+CELL_SIZE) and self.nodes[self.find_node(node.x, node.y+CELL_SIZE)].active:
+            result.add(self.nodes[self.find_node(node.x, node.y+CELL_SIZE)])
+        if self.find_node(node.x+CELL_SIZE, node.y) and self.nodes[self.find_node(node.x+CELL_SIZE, node.y)].active:
+            result.add(self.nodes[self.find_node(node.x+CELL_SIZE, node.y)])
+        if self.find_node(node.x, node.y-CELL_SIZE) and self.nodes[self.find_node(node.x, node.y-CELL_SIZE)].active:
+            result.add(self.nodes[self.find_node(node.x, node.y-CELL_SIZE)])
+        if self.find_node(node.x-CELL_SIZE, node.y) and self.nodes[self.find_node(node.x-CELL_SIZE, node.y)].active:
+            result.add(self.nodes[self.find_node(node.x-CELL_SIZE, node.y)])
         return result
 
 # (x*30 + y)//20

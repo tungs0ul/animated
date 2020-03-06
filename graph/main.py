@@ -29,7 +29,7 @@ while playing:
             keys = pygame.key.get_pressed()
             if event.type == MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
-                posi = pos[0]//20*30 + pos[1]//20
+                posi = pos[0]//CELL_SIZE*(DISPLAY_HEIGHT//CELL_SIZE) + pos[1]//CELL_SIZE
                 if event.button == 1 and not src:
                     g.nodes[posi].choose(RED)
                     src = True
@@ -63,7 +63,7 @@ while playing:
                     cleaning = not cleaning
             if event.type == MOUSEMOTION:
                 pos = pygame.mouse.get_pos()
-                posi = pos[0]//20*30 + pos[1]//20
+                posi = pos[0]//CELL_SIZE*(DISPLAY_HEIGHT//CELL_SIZE) + pos[1]//CELL_SIZE
                 if not drawing:
                     if g.nodes[posi].color == BLACK:
                         g.nodes[posi].deactivate()
@@ -82,6 +82,7 @@ while playing:
     dst = g.nodes[dst_posi]
     distance[src] = 0
     nodes = []
+    nodes.clear()
     heapq.heapify(nodes)
     heapq.heappush(nodes, (distance[src], src))
     show = False
@@ -94,14 +95,14 @@ while playing:
         if len(nodes):
             current_node = heapq.heappop(nodes)[1]
             for node in g.neighbors(current_node):
-                f = 1 + distance[current_node] # + (dst.y - node.y)**2 + (dst.x - node.x)**2
+                f = 1 + distance[current_node] + (dst.y - node.y)**2 + (dst.x - node.x)**2
                 if node not in distance or distance[node] > f:
                     if not ((node.x == dst.x) and (node.y == dst.y)):
                         node.choose(LIGHTGRAY)
                     distance[node] = f
                     previous[node] = current_node
                     heapq.heappush(nodes, (distance[node], node))
-                if node.x == dst.x and node.y == dst.y:
+                if dst in distance:
                     nodes.clear()
         else:
             if not show:
@@ -118,7 +119,8 @@ while playing:
                             finding = False     
                         if keys[K_ESCAPE]:
                             finding = False
-                            playing = False    
+                            playing = False   
+                    counting = False 
             else:
                 for event in pygame.event.get():
                     if event.type == QUIT:
@@ -136,9 +138,9 @@ while playing:
                         playing = False
                     counting = False
         g.draw(win)
-        text = str(int(time_current - time_start))
+        text = str(round(time_current - time_start, 2))
         text = fnt.render(text, 1, RED)
-        win.blit(text, (750, 10))
+        win.blit(text, (720, 10))
         pygame.display.update()
         clock.tick(60)
                        
