@@ -11,8 +11,7 @@ ORANGE = (255, 69, 0)
 DARKBLUE = (0, 0, 139)
 YELLOW = (240, 230, 130)
 
-DIAGONAL = True
-
+DIAGONAL = False
 ASTAR = True
 
 CELL_SIZE = 10
