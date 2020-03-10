@@ -151,4 +151,3 @@ while playing:
         win.blit(text, (720, 10))
         pygame.display.update()
         clock.tick(60)
-                       
