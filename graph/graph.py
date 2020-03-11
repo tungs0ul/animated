@@ -1,4 +1,4 @@
-import pygame
+import pygame, random
 from const import *
 
 class Node:
@@ -8,6 +8,8 @@ class Node:
         self.y = y
         self.fill = False
         self.color = BLACK
+        self.src = self.dst = 2**32
+        self.f = self.g = self.h = 0
 
     def draw(self, win):
         self.rect = (self.x, self.y, CELL_SIZE, CELL_SIZE)
@@ -29,7 +31,7 @@ class Node:
         self.fill = fill
 
     def __lt__(self, other):
-        return self.x**2 + self.y**2 < other.x**2 + self.y**2
+        return self.f < other.f
 
     def __str__(self):
         return str(self.x) + ':' + str(self.y)
@@ -48,24 +50,24 @@ class Graph:
                 return i
         return None
 
-    def neighbors(self, node, diagonal):
+    def neighbors(self, node, diagonal=False):
         result = set()
-        if self.find_node(node.x, node.y+CELL_SIZE) and self.nodes[self.find_node(node.x, node.y+CELL_SIZE)].active:
+        if self.find_node(node.x, node.y+CELL_SIZE) is not None and self.nodes[self.find_node(node.x, node.y+CELL_SIZE)].active:
             result.add(self.nodes[self.find_node(node.x, node.y+CELL_SIZE)])
-        if self.find_node(node.x+CELL_SIZE, node.y) and self.nodes[self.find_node(node.x+CELL_SIZE, node.y)].active:
+        if self.find_node(node.x+CELL_SIZE, node.y) is not None and self.nodes[self.find_node(node.x+CELL_SIZE, node.y)].active:
             result.add(self.nodes[self.find_node(node.x+CELL_SIZE, node.y)])
-        if self.find_node(node.x, node.y-CELL_SIZE) and self.nodes[self.find_node(node.x, node.y-CELL_SIZE)].active:
+        if self.find_node(node.x, node.y-CELL_SIZE) is not None and self.nodes[self.find_node(node.x, node.y-CELL_SIZE)].active:
             result.add(self.nodes[self.find_node(node.x, node.y-CELL_SIZE)])
-        if self.find_node(node.x-CELL_SIZE, node.y) and self.nodes[self.find_node(node.x-CELL_SIZE, node.y)].active:
+        if self.find_node(node.x-CELL_SIZE, node.y) is not None and self.nodes[self.find_node(node.x-CELL_SIZE, node.y)].active:
             result.add(self.nodes[self.find_node(node.x-CELL_SIZE, node.y)])
         if diagonal:
-            if self.find_node(node.x+CELL_SIZE, node.y+CELL_SIZE) and self.nodes[self.find_node(node.x+CELL_SIZE, node.y+CELL_SIZE)].active:
+            if self.find_node(node.x+CELL_SIZE, node.y+CELL_SIZE) is not None and self.nodes[self.find_node(node.x+CELL_SIZE, node.y+CELL_SIZE)].active:
                 result.add(self.nodes[self.find_node(node.x+CELL_SIZE, node.y+CELL_SIZE)])
-            if self.find_node(node.x+CELL_SIZE, node.y-CELL_SIZE) and self.nodes[self.find_node(node.x+CELL_SIZE, node.y-CELL_SIZE)].active:
+            if self.find_node(node.x+CELL_SIZE, node.y-CELL_SIZE) is not None and self.nodes[self.find_node(node.x+CELL_SIZE, node.y-CELL_SIZE)].active:
                 result.add(self.nodes[self.find_node(node.x+CELL_SIZE, node.y-CELL_SIZE)])
-            if self.find_node(node.x-CELL_SIZE, node.y+CELL_SIZE) and self.nodes[self.find_node(node.x-CELL_SIZE, node.y+CELL_SIZE)].active:
+            if self.find_node(node.x-CELL_SIZE, node.y+CELL_SIZE) is not None and self.nodes[self.find_node(node.x-CELL_SIZE, node.y+CELL_SIZE)].active:
                 result.add(self.nodes[self.find_node(node.x-CELL_SIZE, node.y+CELL_SIZE)])
-            if self.find_node(node.x-CELL_SIZE, node.y-CELL_SIZE) and self.nodes[self.find_node(node.x-CELL_SIZE, node.y-CELL_SIZE)].active:
+            if self.find_node(node.x-CELL_SIZE, node.y-CELL_SIZE) is not None and self.nodes[self.find_node(node.x-CELL_SIZE, node.y-CELL_SIZE)].active:
                 result.add(self.nodes[self.find_node(node.x-CELL_SIZE, node.y-CELL_SIZE)])
         return result
 
