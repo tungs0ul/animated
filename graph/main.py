@@ -11,10 +11,8 @@ def main():
     fnt = pygame.font.SysFont("comicsans", 25)
     clock = pygame.time.Clock()
     
+    g = Graphic()
     while True:
-        setting = True
-        menu = Menu()
-        g = Graphic()
         g.setup(win, fnt, clock)
         g.showing(win, fnt, clock)
 

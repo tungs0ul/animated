@@ -9,7 +9,7 @@ class Node:
         self.fill = False
         self.color = BLACK
         self.src = self.dst = 2**32
-        self.f = self.g = self.h = 0
+        self.f = self.g = self.h = 2**32
 
     def draw(self, win):
         self.rect = (self.x, self.y, CELL_SIZE, CELL_SIZE)

@@ -13,6 +13,8 @@ class Graphic:
         self.single = True
         self.map = Graph()
         self.menu = Menu()
+        self.src = None
+        self.dst = None
 
     def draw(self, win, fnt):
         self.map.draw(win)
@@ -20,14 +22,16 @@ class Graphic:
 
     def random_map(self, rate):
         for node in self.map.nodes:
-            node.color = BLACK
-            node.fill = False
-            if random.randint(1, 99) > 99 - rate:
-                node.deactivate()
-        self.src = self.map.nodes[random.randint(0, (DISPLAY_HEIGHT//CELL_SIZE * DISPLAY_WIDTH//CELL_SIZE - 1))]    
-        self.dst = self.map.nodes[random.randint(0, (DISPLAY_HEIGHT//CELL_SIZE * DISPLAY_WIDTH//CELL_SIZE - 1))]
-        self.src.choose(RED)
-        self.dst.choose(BLUE)    
+            if node.color == BLACK:
+                node.activate()
+                if random.randint(1, 99) > 99 - rate:
+                    node.deactivate()
+        if not self.src:
+            self.src = self.map.nodes[random.randint(0, (DISPLAY_HEIGHT//CELL_SIZE * DISPLAY_WIDTH//CELL_SIZE - 1))]  
+            self.src.choose(RED)
+        if not self.dst:  
+            self.dst = self.map.nodes[random.randint(0, (DISPLAY_HEIGHT//CELL_SIZE * DISPLAY_WIDTH//CELL_SIZE - 1))]
+            self.dst.choose(BLUE)    
 
     def setup(self, win, fnt, clock):
         setting = True
@@ -133,6 +137,14 @@ class Graphic:
         self.found_src = self.found_dst = None
         visited = 0
         path = 0
+        src_visited = 0
+
+        open_src = []
+        open_src.append(src)
+        open_dst = []
+        open_dst.append(dst)
+        came_from_src = {}
+        came_from_dst = {}
         while finding:
             if counting:
                 time_end = time.time()
@@ -142,86 +154,87 @@ class Graphic:
                     pygame.quit()
                 keys = pygame.key.get_pressed()
             win.fill(WHITE)
-            if len(nodes_src):
-                current_from_src = heapq.heappop(nodes_src)[1]
-                if current_from_src != self.src:
-                    current_from_src.choose(RED, False)
-                for node in self.map.neighbors(current_from_src, self.menu.diagonal.fill):
-                    if self.menu.astar.fill:
+            if not self.menu.astar.fill:
+                if len(nodes_src):
+                    src_visited += 1
+                    current_from_src = heapq.heappop(nodes_src)[1]
+                    if current_from_src != self.src:
+                        current_from_src.choose(RED, False)
+                    for node in self.map.neighbors(current_from_src, self.menu.diagonal.fill):
                         f = distance_src[current_from_src] + (current_from_src.x - node.x)**2 + (current_from_src.y - node.y)**2
-                        f += (self.dst.y - node.y)**2 + (self.dst.x - node.x)**2
-                        if self.menu.dir2.fill:
-                            f += (current_from_dst.x - node.x)**2 + (current_from_dst.y - node.y)**2
-                    elif self.menu.dsk.fill:
-                        f = distance_src[current_from_src] + (current_from_src.x - node.x)**2 + (current_from_src.y - node.y)**2
-                    else:
-                        f = (current_from_src.y - node.y)**2 + (current_from_src.x - node.x)**2 + (self.dst.x - node.x)**2 + (self.dst.y - node.y)**2
-                    if node not in distance_src:
-                        visited += 1
-                        if node != self.dst:
-                            node.choose(YELLOW)
-                        distance_src[node] = f
-                        previous_src[node] = current_from_src
-                        heapq.heappush(nodes_src, (distance_src[node], node))
-                    if node in distance_dst:
-                        nodes_dst.clear()
-                        nodes_src.clear()
-                        self.found_dst = node
-                        self.found_src = node 
-                if self.dst in distance_src:
-                    nodes_src.clear()
-                    self.found_dst = previous_src[self.dst]
-                if self.menu.dir2.fill:
-                    if len(nodes_dst):
-                        visited += 1
-                        current_from_dst = heapq.heappop(nodes_dst)[1]
-                        if current_from_dst != self.dst:
-                            current_from_dst.choose(BLUE, False)
-                        for node in self.map.neighbors(current_from_dst, self.menu.diagonal.fill):
-                            if self.menu.astar.fill:
-                                f = distance_dst[current_from_dst] + (current_from_dst.x - node.x)**2 + (current_from_dst.y - node.y)**2
-                                f += (self.src.y - node.y)**2 + (self.src.x - node.x)**2
-                                f += (current_from_src.x - node.x)**2 + (current_from_src.y - node.y)**2
-                            elif self.menu.dsk.fill:
-                                f = distance_dst[current_from_dst] + (current_from_dst.x - node.x)**2 + (current_from_dst.y - node.y)**2
+                        if (node not in distance_src) or (distance_src[node] > f):
+                            visited += 1
+                            if node != self.dst:
+                                node.choose(YELLOW)
+                            distance_src[node] = f
+                            previous_src[node] = current_from_src
+                            if self.menu.fast.fill:
+                                heapq.heappush(nodes_src, (distance_src[node] + (node.x - self.dst.x)**2 + (node.y - self.dst.y)**2, node))
                             else:
-                                f = (current_from_dst.y - node.y)**2 + (current_from_dst.x - node.x)**2 + (current_from_src.x - node.x)**2 + (current_from_src.y - node.y)**2
-                            if node not in distance_dst:
-                                visited += 1
-                                if node != self.dst:
-                                    node.choose(YELLOW)
-                                distance_dst[node] = f
-                                previous_dst[node] = current_from_dst
-                                heapq.heappush(nodes_dst, (distance_dst[node], node))
-                            if node in distance_src:
-                                self.found_src = node
-                                self.found_dst = node
-                                nodes_src.clear()
-                                nodes_dst.clear()
-                    else:
+                                heapq.heappush(nodes_src, (distance_src[node], node))
+                        if node in distance_dst:
+                            nodes_dst.clear()
+                            nodes_src.clear()
+                            self.found_dst = node
+                            self.found_src = node 
+                    if self.dst in distance_src:
                         nodes_src.clear()
-            else:
-                if self.found_dst:
-                    if self.found_dst != self.src:
-                        self.found_dst.choose(GREEN)
-                        self.found_dst = previous_src[self.found_dst]
-                        path += 1
-                    if self.found_src != self.dst:
-                        self.found_src.choose(GREEN)
-                        self.found_src = previous_dst[self.found_src]
-                        path += 1
+                        self.found_dst = previous_src[self.dst]
+                    if self.menu.dir2.fill:
+                        if len(nodes_dst):
+                            visited += 1
+                            current_from_dst = heapq.heappop(nodes_dst)[1]
+                            if current_from_dst != self.dst:
+                                current_from_dst.choose(BLUE, False)
+                            for node in self.map.neighbors(current_from_dst, self.menu.diagonal.fill):
+                                if self.menu.dsk.fill:
+                                    f = distance_dst[current_from_dst] + (current_from_dst.x - node.x)**2 + (current_from_dst.y - node.y)**2
+                                else:
+                                    f = (current_from_dst.y - node.y)**2 + (current_from_dst.x - node.x)**2 + (current_from_src.x - node.x)**2 + (current_from_src.y - node.y)**2
+                                if node not in distance_dst:
+                                    visited += 1
+                                    if node != self.dst:
+                                        node.choose(YELLOW)
+                                    distance_dst[node] = f
+                                    previous_dst[node] = current_from_dst
+                                    heapq.heappush(nodes_dst, (distance_dst[node], node))
+                                if current_from_dst in distance_src:
+                                    self.found_src = current_from_dst
+                                    self.found_dst = current_from_dst
+                                    nodes_src.clear()
+                                    nodes_dst.clear()
+                        else:
+                            nodes_src.clear()
+                else:
+                    if self.found_dst:
+                        if self.found_dst != self.src:
+                            self.found_dst.choose(GREEN)
+                            self.found_dst = previous_src[self.found_dst]
+                            path += 1
+                        if self.found_src != self.dst:
+                            self.found_src.choose(GREEN)
+                            self.found_src = previous_dst[self.found_src]
+                            path += 1
+                        else:
+                            counting = False
+                            if keys[K_RETURN] or keys[K_SPACE]:
+                                finding = False
+                                for node in self.map.nodes:
+                                    if (not node.fill) or (node.color in (YELLOW, GREEN)):
+                                        node.choose(BLACK, False)
+                            if keys[K_ESCAPE]:
+                                pygame.quit()          
                     else:
-                        counting = False
                         if keys[K_RETURN] or keys[K_SPACE]:
                             finding = False
+                            for node in self.map.nodes:
+                                if (not node.fill) or (node.color in (YELLOW, GREEN)):
+                                    node.choose(BLACK, False)
                         if keys[K_ESCAPE]:
-                            pygame.quit()          
-                else:
-                    if keys[K_RETURN] or keys[K_SPACE]:
-                        finding = False
-                    if keys[K_ESCAPE]:
-                        pygame.quit()
-                    counting = False
+                            pygame.quit()
+                        counting = False
+            else:
+                nodes_src
             text = str(round(time_end - time_start, 2)) + 's'
             text = fnt.render(text, 1, RED)  
             win.blit(text, (20, 610))
