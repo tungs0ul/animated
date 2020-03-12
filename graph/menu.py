@@ -40,15 +40,15 @@ class Button:
 class Menu:
     def __init__(self):
         self.rate = 30
-        self.rect = Button('Rectangle', 'circle', (DISPLAY_WIDTH//5 * 3, DISPLAY_HEIGHT + MENU_HEIGHT//3 * 2), RADIO_RADIUS, True)
-        self.diagonal = Button('Diagonal', 'circle', (DISPLAY_WIDTH//5 * 3, DISPLAY_HEIGHT + MENU_HEIGHT//3), RADIO_RADIUS)
-        self.astar = Button('A*', 'circle', (DISPLAY_WIDTH//5 * 2, DISPLAY_HEIGHT + MENU_HEIGHT//4), RADIO_RADIUS)
-        self.dsk = Button('Dijkstra', 'circle', (DISPLAY_WIDTH//5 * 2, DISPLAY_HEIGHT + MENU_HEIGHT//4 * 2), RADIO_RADIUS)
-        self.fast = Button('Random', 'circle', (DISPLAY_WIDTH//5 * 2, DISPLAY_HEIGHT + MENU_HEIGHT//4 * 3), RADIO_RADIUS, True)
-        self.dir1 = Button('1 Direction', 'circle', (DISPLAY_WIDTH//5 * 4, DISPLAY_HEIGHT + MENU_HEIGHT//3 * 2), RADIO_RADIUS, True)
-        self.dir2 = Button('2 Direction', 'circle', (DISPLAY_WIDTH//5 * 4, DISPLAY_HEIGHT + MENU_HEIGHT//3), RADIO_RADIUS)
-        self.generator = Button('Generate', 'rect', (DISPLAY_WIDTH//5 + 2 * BUTTON_LENGTH, DISPLAY_HEIGHT + MENU_HEIGHT//3), RADIO_RADIUS, False, self.rate)
-        self.block = Button('Draw', 'rect', (5*BUTTON_LENGTH, DISPLAY_HEIGHT + MENU_HEIGHT//3), BUTTON_WIDTH)
+        self.rect = Button('Rectangle', 'circle', (DISPLAY_WIDTH//6 * 4, DISPLAY_HEIGHT + MENU_HEIGHT//3 * 2), RADIO_RADIUS, True)
+        self.diagonal = Button('Diagonal', 'circle', (DISPLAY_WIDTH//6 * 4, DISPLAY_HEIGHT + MENU_HEIGHT//3), RADIO_RADIUS)
+        self.astar = Button('A*', 'circle', (DISPLAY_WIDTH//6 * 3, DISPLAY_HEIGHT + MENU_HEIGHT//4), RADIO_RADIUS)
+        self.dsk = Button('Dijkstra', 'circle', (DISPLAY_WIDTH//6 * 3, DISPLAY_HEIGHT + MENU_HEIGHT//4 * 2), RADIO_RADIUS)
+        self.fast = Button('Random', 'circle', (DISPLAY_WIDTH//6 * 3, DISPLAY_HEIGHT + MENU_HEIGHT//4 * 3), RADIO_RADIUS, True)
+        self.dir1 = Button('1 Direction', 'circle', (DISPLAY_WIDTH//6 * 5, DISPLAY_HEIGHT + MENU_HEIGHT//3 * 2), RADIO_RADIUS, True)
+        self.dir2 = Button('2 Direction', 'circle', (DISPLAY_WIDTH//6 * 5, DISPLAY_HEIGHT + MENU_HEIGHT//3), RADIO_RADIUS)
+        self.generator = Button('Generate', 'rect', (DISPLAY_WIDTH//6 + 7 * BUTTON_LENGTH, DISPLAY_HEIGHT + MENU_HEIGHT//3), RADIO_RADIUS, False, self.rate)
+        self.block = Button('Draw', 'rect', (10*BUTTON_LENGTH, DISPLAY_HEIGHT + MENU_HEIGHT//3), BUTTON_WIDTH)
 
     def draw(self, win, fnt):
         self.astar.draw(win, fnt)
