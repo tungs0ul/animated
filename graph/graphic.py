@@ -207,7 +207,7 @@ class Graphic:
                                 if self.menu.astar.fill:
                                     heapq.heappush(nodes_dst, (node.f + math.sqrt((self.src.x - node.x)**2 + (self.src.y - node.y)**2), node))
                                 elif self.menu.fast.fill:
-                                    heapq.heappush(nodes_dst, (distance_dst[node] + math.sqrt((self.src.x - node.x)**2 + (self.src.y - node.y)**2), node))
+                                    heapq.heappush(nodes_dst, (distance_dst[node] + (node.x - self.src.x)**2 + (node.y - self.src.y)**2, node))
                                 else:
                                     heapq.heappush(nodes_dst, (distance_dst[node], node))
                         if current_from_dst in distance_src:
