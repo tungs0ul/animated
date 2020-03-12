@@ -162,7 +162,7 @@ class Graphic:
             if len(nodes_src):
                 current_from_src = heapq.heappop(nodes_src)[1]
                 if current_from_src != self.src:
-                    current_from_src.choose(RED, False)
+                    current_from_src.choose(LIGHTRED, False)
                 for node in self.map.neighbors(current_from_src, self.menu.diagonal.fill):
                     f = distance_src[current_from_src] + math.sqrt((current_from_src.x - node.x)**2 + (current_from_src.y - node.y)**2)
                     if (node not in distance_src) or (distance_src[node] > f):
@@ -192,7 +192,7 @@ class Graphic:
                     if len(nodes_dst):
                         current_from_dst = heapq.heappop(nodes_dst)[1]
                         if current_from_dst != self.dst:
-                            current_from_dst.choose(BLUE, False)
+                            current_from_dst.choose(LIGHTBLUE, False)
                         for node in self.map.neighbors(current_from_dst, self.menu.diagonal.fill):
                             f = distance_dst[current_from_dst] + math.sqrt((current_from_dst.x - node.x)**2 + (current_from_dst.y - node.y)**2)
                             if (node not in distance_dst) or (distance_dst[node] > f):

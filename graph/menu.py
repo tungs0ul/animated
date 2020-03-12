@@ -44,7 +44,7 @@ class Menu:
         self.diagonal = Button('Diagonal', 'circle', (DISPLAY_WIDTH//6 * 4, DISPLAY_HEIGHT + MENU_HEIGHT//3), RADIO_RADIUS)
         self.astar = Button('A*', 'circle', (DISPLAY_WIDTH//6 * 3, DISPLAY_HEIGHT + MENU_HEIGHT//4), RADIO_RADIUS)
         self.dsk = Button('Dijkstra', 'circle', (DISPLAY_WIDTH//6 * 3, DISPLAY_HEIGHT + MENU_HEIGHT//4 * 2), RADIO_RADIUS)
-        self.fast = Button('Random', 'circle', (DISPLAY_WIDTH//6 * 3, DISPLAY_HEIGHT + MENU_HEIGHT//4 * 3), RADIO_RADIUS, True)
+        self.fast = Button('Greedy', 'circle', (DISPLAY_WIDTH//6 * 3, DISPLAY_HEIGHT + MENU_HEIGHT//4 * 3), RADIO_RADIUS, True)
         self.dir1 = Button('1 Direction', 'circle', (DISPLAY_WIDTH//6 * 5, DISPLAY_HEIGHT + MENU_HEIGHT//3 * 2), RADIO_RADIUS, True)
         self.dir2 = Button('2 Direction', 'circle', (DISPLAY_WIDTH//6 * 5, DISPLAY_HEIGHT + MENU_HEIGHT//3), RADIO_RADIUS)
         self.generator = Button('Generate', 'rect', (DISPLAY_WIDTH//6 + 7 * BUTTON_LENGTH, DISPLAY_HEIGHT + MENU_HEIGHT//3), RADIO_RADIUS, False, self.rate)
