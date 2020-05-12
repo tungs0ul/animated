@@ -7,6 +7,6 @@
     * ### LEFT MOUSE: draw
     * ### RIGHT MOUSE: erase
   * ### KEY_2 : auto generate map
-  * ### KEY_3 : change algorithm( A*, Dijsktra, Greedy)
+  * ### KEY_3 : algorithm( A*, Dijsktra, Greedy)
   * ### KEY_4 : rectangle or diagonale mode
   * ### KEY_5 : search from source or from both direction
