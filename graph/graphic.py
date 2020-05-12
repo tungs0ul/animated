@@ -90,7 +90,7 @@ class Graphic:
                 if (keys[K_LEFT] or keys[K_a]) and self.menu.generator.rate > 0:
                     self.menu.generator.rate -= 5
                     self.menu.block.fill = False
-                if (keys[K_RETURN] or keys[K_SPACE]) and self.src and self.dst:
+                if (keys[K_RETURN]) and self.src and self.dst:
                     setting = False
                     self.menu.block.fill = False
                 if keys[K_1]:
@@ -229,7 +229,7 @@ class Graphic:
                         path.add(self.found_src)
                     else:
                         counting = False
-                        if keys[K_RETURN] or keys[K_SPACE]:
+                        if keys[K_SPACE]:
                             self.last_time = str(round(time_end - time_start, 2)) + 's'
                             self.last_visited = str(visited)
                             self.last_path = str(len(path)) if self.menu.dir1.fill else str(len(path) - 1)
@@ -240,7 +240,7 @@ class Graphic:
                         if keys[K_ESCAPE]:
                             pygame.quit()          
                 else:
-                    if keys[K_RETURN] or keys[K_SPACE]:
+                    if keys[K_SPACE]:
                         self.last_path = self.last_visited = self.last_time = None
                         finding = False
                         for node in self.map.nodes:
