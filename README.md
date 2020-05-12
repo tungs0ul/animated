@@ -1,4 +1,4 @@
-# visualization of searching sorting and path finding
+# visualization of searching, sorting and path finding
 
 * ## for graph programm
   * ### LEFT MOUSE: set source node
